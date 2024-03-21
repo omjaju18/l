@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch","fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//id: This field is a unique identifier for each course. It's set to automatically generate a UUID (Universally Unique Identifier) for every new course.
+
+//userId: This likely represents the ID of the user who created the course. It establishes a relationship between users and courses.
+
+//title: Stores the title of the course. It's annotated with @db.Text, indicating that it might be stored as a text field in the database.
+
+//description: This field holds a description of the course. It's optional (String?), meaning it can be null, and it's also annotated with @db.Text.
+
+//imageUrl: Represents the URL or path to an image associated with the course. It's optional and likely used for displaying course images.
+
+//price: Stores the price of the course. It's a floating-point number (Float), indicating it can handle decimal values.
+
+//isPublished: Indicates whether the course is published or not. It's set to default to false if not explicitly specified.
+
+//categoryId: Represents the ID of the category to which the course belongs.
+
+//category: Establishes a relationship between the course and its category. It references the "Category" table.
+
+//chapters: An array storing the chapters of the course. Each chapter likely has its own properties and content.
+
+//attachments: Represents any additional files or resources attached to the course.
+
+//purchases: Stores information about purchases of the course.
+
+//createdAt: Automatically records the date and time when the course is created.
+
+//updatedAt: Automatically updates the date and time whenever the course information is modified.
+
+//@@index([categoryId]): Indicates that an index should be created on the categoryId field, which can help optimize database queries involving category-related operations.
+
+//@@fulltext([title]): This is commented out (with //). It seems to be an attempt to create a full-text index on the title field for efficient text searches, but it's not currently active.
+
+model Course {
+  id String @id @default(uuid())
+  userId String
+  title String @db.Text
+  description String? @db.Text
+  imageUrl String? @db.Text
+  price Float?
+  isPublished Boolean @default(false)
+
+  categoryId String?
+  category Category? @relation(fields: [categoryId], references: [id])
+
+  chapters Chapter[]
+  attachments Attachment[]
+  purchases Purchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@fulltext([title])
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String @unique
+  courses Course[]
+}
+
+model Attachment {
+  id String @id @default(uuid())
+  name String
+  url String @db.Text
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+model Chapter {
+  id String @id @default(uuid())
+  title String
+  description String? @db.Text
+  videoUrl String? @db.Text
+  position Int
+  isPublished Boolean @default(false)
+  isFree Boolean @default(false)
+
+  muxData MuxData?
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  userProgress UserProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+model MuxData {
+  id String @id @default(uuid())
+  assetId String
+  playbackId String?
+
+  chapterId String @unique
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model UserProgress {
+  id String @id @default(uuid())
+  userId String
+
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  isCompleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([chapterId])
+  @@unique([userId, chapterId])
+}
+
+model Purchase {
+  id String @id @default(uuid())
+  userId String
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model StripeCustomer {
+  id String @id @default(uuid())
+  userId String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
