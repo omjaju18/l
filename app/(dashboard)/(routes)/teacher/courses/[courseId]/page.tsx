@@ -15,7 +15,6 @@ import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Actions } from "./_components/actions";
 
-
 const CourseIdPage = async ({
   params
 }: {
@@ -92,7 +91,6 @@ const CourseIdPage = async ({
           <Actions
             disabled={!isComplete}
             courseId={params.courseId}
-           
             isPublished={course.isPublished}
           />
         </div>
