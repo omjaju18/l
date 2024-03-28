@@ -19,7 +19,7 @@ export async function POST(
       where: {
         id: params.courseId,
         userId: userId,
-      }
+      },
     });
 
     if (!courseOwner) {
@@ -42,7 +42,7 @@ export async function POST(
         title,
         courseId: params.courseId,
         position: newPosition,
-      }
+      },
     });
 
     return NextResponse.json(chapter);
@@ -50,4 +50,4 @@ export async function POST(
     console.log("[CHAPTERS]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
-} 
+}
