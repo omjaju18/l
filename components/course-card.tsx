@@ -52,9 +52,14 @@ export const CourseCard = ({
             </div>
           </div>
           {progress !== null ? (
-           <div>
-            Todo
-           </div>
+            <div>
+              <CourseProgress
+                variant={progress === 100 ? "sucess" : "default"}
+                size="sm"
+                value={progress}
+
+              />
+            </div>
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
               {formatPrice(price)}
