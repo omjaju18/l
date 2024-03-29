@@ -1,28 +1,28 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation";
+
+import { cn } from "@/lib/utils";
 
 interface SidebarItemProps {
   icon: LucideIcon;
   label: string;
   href: string;
-
 };
 
 export const SidebarItem = ({
   icon: Icon,
   label,
-  href
+  href,
 }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
   const isActive =
-    (pathname === "/" && href === "/")
-  pathname === href
-  pathname?.startsWith(`${href} /`);
+    (pathname === "/" && href === "/") ||
+    pathname === href ||
+    pathname?.startsWith(`${href}/`);
 
   const onClick = () => {
     router.push(href);
@@ -51,7 +51,8 @@ export const SidebarItem = ({
         className={cn(
           "ml-auto opacity-0 border-2 border-sky-700 h-full transition-all",
           isActive && "opacity-100"
-        )} />
+        )}
+      />
     </button>
   )
 }
