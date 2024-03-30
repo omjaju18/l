@@ -3,16 +3,17 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { getProgress } from "@/actions/get-progress";
-import { CourseNavbar } from "./_components/course-navbar";
+
 import { CourseSidebar } from "./_components/course-sidebar";
+import { CourseNavbar } from "./_components/course-navbar";
 
-
-
-const CourseLayout = async ({ children, params }: {
+const CourseLayout = async ({
+  children,
+  params
+}: {
   children: React.ReactNode;
-  params: { courseId: String }
+  params: { courseId: string };
 }) => {
-
   const { userId } = auth();
 
   if (!userId) {
@@ -48,10 +49,7 @@ const CourseLayout = async ({ children, params }: {
 
   const progressCount = await getProgress(userId, course.id);
 
-
-
   return (
-
     <div className="h-full">
       <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
         <CourseNavbar
@@ -69,8 +67,7 @@ const CourseLayout = async ({ children, params }: {
         {children}
       </main>
     </div>
-
-  );
+  )
 }
 
-export default CourseLayout;
+export default CourseLayout
