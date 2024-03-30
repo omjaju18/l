@@ -54,7 +54,7 @@ export const CourseCard = ({
           {progress !== null ? (
             <div>
               <CourseProgress
-                variant={progress === 100 ? "sucess" : "default"}
+                variant={progress === 100 ? "success" : "default"}
                 size="sm"
                 value={progress}
 
