@@ -9,9 +9,10 @@ import { ConfettiProvider } from '@/components/providers/confetti-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'OV',
-  description: 'The Ultimate Platform for Learning',
-}
+  title: "Logoipsum",
+  description:
+    "The Learning Management System that holds the weight of your knowledge",
+};
 
 export default function RootLayout({
   children,
